@@ -6,26 +6,31 @@
 //  Copyright © 2021 Noé. All rights reserved.
 //
 #include "utils/utils.hpp"
+#include "maze/maze.hpp"
 
 int main(int, char const**)
 {
-    int zoom = 1;
+    int size = 10;
     
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "maze solver");
+    sf::RenderWindow window(sf::VideoMode(WIDTH-size, HEIGHT-size), "maze solver");
+    //window.setVerticalSyncEnabled(true);
+    window.setFramerateLimit(100);
 
     bool end = false;
     sf::Event sf_event;
-    sf::RectangleShape pixel;
-    pixel.setSize(sf::Vector2f(zoom, zoom));
-    std::vector<std::vector<int>> maze;
 
+    Maze maze(WIDTH/size-1,HEIGHT/size-1);
+    maze.initialize();
+    
     while (window.isOpen())
     {
         events(sf_event, window, end);
 
-        window.clear();
+        window.clear(sf::Color::White);
+        
+        maze.generate(sf_event, window, end, size);
 
-        window.display();
+        //sf::sleep(sf::seconds(1));
     }
 
     return EXIT_SUCCESS;
